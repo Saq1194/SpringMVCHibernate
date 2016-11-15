@@ -1,13 +1,6 @@
 package com.journaldev.spring.model;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.util.List;
 
 /**
@@ -32,8 +25,8 @@ public class Person {
 	private String country;
 
 //	@OneToMany(mappedBy = "person", fetch = FetchType.LAZY)
-	@OneToMany
-	@JoinColumn(name = "person_id")
+	@OneToMany(cascade = CascadeType.REMOVE)
+	@JoinColumn(name = "person_id", updatable = false, insertable = false)
 	private List<Address> addresses;
 
 	public int getId() {
