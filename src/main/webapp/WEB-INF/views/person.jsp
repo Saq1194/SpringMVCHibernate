@@ -54,6 +54,7 @@
 			<form:input path="country" />
 		</td>
 	</tr>
+
 	<tr>
 		<td colspan="2">
 			<c:if test="${!empty person.name}">

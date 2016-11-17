@@ -8,10 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 @Controller
@@ -32,10 +29,12 @@ public class PersonController {
 		this.addressService = as;
 	}
 
+
 	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public String defaultPath() {
 		return "redirect:/persons";
 	}
+
 
 	@RequestMapping(value = "/persons", method = RequestMethod.GET)
 	public String listPersons(Model model) {
@@ -44,12 +43,14 @@ public class PersonController {
 		return "person";
 	}
 
-	//For add and update person both
+
+
+
+    //For add and update person both
 	@RequestMapping(value= "/person/add", method = RequestMethod.POST)
 	public String addPerson(@ModelAttribute("person") Person p){
 
 		if(p.getId() == 0){
-			//new person, add it
 			this.personService.addPerson(p);
 		}else{
 			//existing person, call update
@@ -75,7 +76,7 @@ public class PersonController {
     }
 
 
-    @RequestMapping("/viewa_addresses/{id}")
+    @RequestMapping(value = "/viewa_addresses/{id}", method = RequestMethod.GET)
     public ModelAndView viewAddresses(@PathVariable("id") int id, Model model){
 		ModelAndView modelAndView = new ModelAndView("addresses");
 
@@ -84,23 +85,44 @@ public class PersonController {
 		a.setPersonId(id);
 
 		model.addAttribute("addresses", a);
-
-
-//		modelMap.addAttribute("listAddress", this.personService.getPersonWithAddressesById(id).getAddresses());
+		model.addAttribute("personId", id);
 
         return modelAndView;
     }
 
-	@RequestMapping(value= "/address/add", method = RequestMethod.POST)
-	public String addAddress(@ModelAttribute("address") Address address){
+	@RequestMapping(value= "/addresses/add", method = RequestMethod.POST)
+	public String addAddress(@ModelAttribute("addresses") Address addresses){
 
 
-			this.addressService.addAddress(address);
+        if(addresses.getId() == 0) {
+            this.addressService.addAddress(addresses);
+        }else{
+            this.addressService.updateAddress(addresses);
+        }
 
-
-		return "redirect:/viewa_addresses/" + address.getPersonId();
+		return "redirect:/viewa_addresses/" + addresses.getPersonId();
 
 	}
+
+    @RequestMapping("/remove_address/person/{personId}/address/{addressId}" )
+    public String removeAddress(@PathVariable("personId") int personId,@PathVariable("addressId") int addressId){
+
+        this.addressService.removeAddress(addressId);
+
+        return "redirect:/viewa_addresses/"+personId;
+    }
+
+    @RequestMapping("/edit_address/{id}")
+    public ModelAndView editAddress(@PathVariable("id") int id){
+        ModelAndView modelAndView=new ModelAndView("addresses");
+        modelAndView.addObject("addresses",  this.addressService.getAddressById(id));
+
+
+        return modelAndView;
+    }
+
+
+
 
 
 }

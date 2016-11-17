@@ -15,69 +15,14 @@
 <body>
 
 
-<%--<h1>--%>
-	<%--Add a Address--%>
-<%--</h1>--%>
-
-<%--<c:url var="addAction" value="/person/add" ></c:url>--%>
-
-<%--<form:form action="${addAction}" commandName="person">--%>
-<%--<table>--%>
-	<%--<c:if test="${!empty person.name}">--%>
-	<%--<tr>--%>
-		<%--<td>--%>
-			<%--<form:label path="id">--%>
-				<%--<spring:message text="ID"/>--%>
-			<%--</form:label>--%>
-		<%--</td>--%>
-		<%--<td>--%>
-			<%--<form:input path="id" readonly="true" size="8"  disabled="true" />--%>
-			<%--<form:hidden path="id" />--%>
-		<%--</td> --%>
-	<%--</tr>--%>
-	<%--</c:if>--%>
-	<%--<tr>--%>
-		<%--<td>--%>
-			<%--<form:label path="name">--%>
-				<%--<spring:message text="Name"/>--%>
-			<%--</form:label>--%>
-		<%--</td>--%>
-		<%--<td>--%>
-			<%--<form:input path="name" />--%>
-		<%--</td> --%>
-	<%--</tr>--%>
-	<%--<tr>--%>
-		<%--<td>--%>
-			<%--<form:label path="country">--%>
-				<%--<spring:message text="Country"/>--%>
-			<%--</form:label>--%>
-		<%--</td>--%>
-		<%--<td>--%>
-			<%--<form:input path="country" />--%>
-		<%--</td>--%>
-	<%--</tr>--%>
-	<%--<tr>--%>
-		<%--<td colspan="2">--%>
-			<%--<c:if test="${!empty person.name}">--%>
-				<%--<input type="submit"--%>
-					<%--value="<spring:message text="Edit Person"/>" />--%>
-			<%--</c:if>--%>
-			<%--<c:if test="${empty person.name}">--%>
-				<%--<input type="submit"--%>
-					<%--value="<spring:message text="Add Person"/>" />--%>
-			<%--</c:if>--%>
-		<%--</td>--%>
-	<%--</tr>--%>
-<%--</table>	--%>
-<%--</form:form>--%>
 <br>
 <h3>Address List</h3>
 
-<c:url var="addAction" value="/address/add" ></c:url>
+<c:url var="addAction" value="/addresses/add" ></c:url>
 
 <form:form action="${addAction}" commandName="addresses">
 	<table>
-	<c:if test="${empty addresses.name}">
+	<c:if test="${!empty addresses.name}">
 		<tr>
 			<td>
 				<form:label path="id">
@@ -92,7 +37,11 @@
 	</c:if>
 	<tr>
 	<td>
-	<form:label path="name">
+
+		<form:hidden path="personId" />
+
+		<form:label path="name">
+			<form:hidden path="id" />
 		<spring:message text="Address"/>
 	</form:label>
 	</td>
@@ -102,13 +51,19 @@
 	</td>
 	</tr>
 
-		<td colspan="2">
+		<tr>
+			<td colspan="2">
+				<c:if test="${!empty addresses.name}">
+					<input type="submit"
+						   value="<spring:message text="Edit Address"/>" />
+				</c:if>
+				<c:if test="${empty addresses.name}">
+					<input type="submit"
+						   value="<spring:message text="Add Address"/>" />
+				</c:if>
+			</td>
+		</tr>
 
-
-				<input type="submit"
-					   value="<spring:message text="Add Person"/>" />
-
-		</td>
 		</form:form>
 
 
@@ -119,15 +74,15 @@
 	<tr>
 		<th width="80">Address ID</th>
 		<th width="120">Address Name</th>
-		<%--<th width="60">Edit</th>--%>
-		<%--<th width="60">Delete</th>--%>
+		<th width="60">Edit</th>
+		<th width="60">Delete</th>
 	</tr>
 	<c:forEach items="${listAddress}" var="address">
 		<tr>
 			<td>${address.id}</td>
 			<td>${address.name}</td>
-				<%--<td><a href="<c:url value='/edit/${person.id}' />" >Edit</a></td>--%>
-			<%--<td><a href="<c:url value='/remove/${person.id}' />" >Delete</a></td>--%>
+				<td><a href="<c:url value='/edit_address/${address.id}' />" >Edit</a></td>
+			<td><a href="<c:url value='/remove_address/person/${personId}/address/${address.id}' />" >Delete</a></td>
 		</tr>
 	</c:forEach>
 	</table>

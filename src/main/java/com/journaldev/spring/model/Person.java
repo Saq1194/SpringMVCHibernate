@@ -25,7 +25,7 @@ public class Person {
 	private String country;
 
 //	@OneToMany(mappedBy = "person", fetch = FetchType.LAZY)
-	@OneToMany(cascade = CascadeType.REMOVE)
+	@OneToMany(cascade = CascadeType.ALL)
 	@JoinColumn(name = "person_id", updatable = false, insertable = false)
 	private List<Address> addresses;
 
